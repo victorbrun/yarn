@@ -7,12 +7,20 @@ steps:
     commands:
       - yarn install --frozen-lockfile
 
+  - name: build
+    image: yarnpkg/dev:latest
+    commands:
+      - yarn build
+    depends_on:
+      - install
+
   - name: testing
     image: yarnpkg/dev:latest
     commands:
       - yarn test-only --maxWorkers 3
     depends_on:
       - install
+      - build
 
   - name: linting
     image: yarnpkg/dev:latest
@@ -20,11 +28,3 @@ steps:
       - yarn lint
     depends_on:
       - install
-
-  - name: build
-    image: yarnpkg/dev:latest
-    commands:
-      - yarn build
-    depends_on:
-      - linting
-      - testing
